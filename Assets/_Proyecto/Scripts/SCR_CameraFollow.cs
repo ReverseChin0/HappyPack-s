@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class SCR_CameraFollow : MonoBehaviour
 {
-    [SerializeField] Transform targetToLook;
-    [SerializeField] Transform targetPoint;
+    [SerializeField] Transform targetToLook = default;
+    [SerializeField] Transform targetPoint = default;
     [SerializeField, Range(0.0f,5.0f)] float smoothTime = 1.0f;
     Transform _tran;
 

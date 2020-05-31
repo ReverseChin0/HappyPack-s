@@ -32,7 +32,7 @@ RenderSettings:
   m_FlareFadeSpeed: 3
   m_HaloTexture: {fileID: 0}
   m_SpotCookie: {fileID: 10001, guid: 0000000000000000e000000000000000, type: 0}
-  m_DefaultReflectionMode: 0
+  m_DefaultReflectionMode: 1
   m_DefaultReflectionResolution: 128
   m_ReflectionBounces: 1
   m_ReflectionIntensity: 1
@@ -56,7 +56,7 @@ LightmapSettings:
   m_LightmapEditorSettings:
     serializedVersion: 12
     m_Resolution: 2
-    m_BakeResolution: 28
+    m_BakeResolution: 26
     m_AtlasSize: 512
     m_AO: 1
     m_AOMaxDistance: 1
@@ -1783,9 +1783,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 374995553f8067a438a40f69f4fe2806, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  aceleracion: 0.5
+  aceleracion: 0.3
   velocidadMax: 0.5
-  sensiGiro: 0.5
+  sensiGiro: 0.7
   isPhone: 0
 --- !u!1 &1801536580
 GameObject:

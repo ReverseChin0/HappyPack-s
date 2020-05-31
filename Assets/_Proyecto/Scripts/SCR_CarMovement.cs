@@ -6,13 +6,13 @@ using UnityEngine;
 public class SCR_CarMovement : MonoBehaviour
 {
     [SerializeField] float aceleracion = 1.0f, velocidadMax = 1.0f;
-    [SerializeField,Range(0.0f,1.0f)]float sensiGiro = 3.0f;
-    public bool isPhone = false;
-
+    [SerializeField,Range(0.0f,1.0f)]float sensiGiro = 1.0f;
     Vector3 direccionfinal;
     Transform _transform;
     Rigidbody _rb;
-    float velocidad=0, velocidadActual=0.0f;
+    float velocidad=0, velocidadActual=0.0f, rotacion=0.0f;
+
+    public bool isPhone = false;
 
     private void Awake() {
         _rb = GetComponent<Rigidbody>();
@@ -30,19 +30,16 @@ public class SCR_CarMovement : MonoBehaviour
         else
             InputsTeclas();
 
-        velocidad = Mathf.Clamp(velocidad, -velocidadMax*0.1f, velocidadMax);
+        velocidad = Mathf.Clamp(velocidad, -velocidadMax* 0.1f, velocidadMax);
 
-        if(velocidad!=0)
-        velocidadActual = velocidad/velocidadMax;
-
-        if (velocidad > 0) 
-        {
-            direccionfinal = transform.forward * velocidad;
-        } 
-        else 
-        {
-            direccionfinal = Vector3.zero;
+        if (velocidad != 0) {
+            velocidadActual = velocidad / velocidadMax;
+            float multiplicadorgiro = Remap(velocidadActual, 0, 1, 6, 1);
+            //print(multiplicadorgiro);
+            _transform.Rotate(Vector3.up, rotacion * sensiGiro * multiplicadorgiro);
         }
+
+        direccionfinal = transform.forward * velocidad;
     }
 
     private void FixedUpdate() 
@@ -52,32 +49,27 @@ public class SCR_CarMovement : MonoBehaviour
 
     private void InputsCelular() 
     {
-        if (Input.touchCount > 0) {
-            velocidad -= aceleracion * 0.5f * Time.deltaTime;
-        } else {
+        if (Input.touchCount > 0) 
+            velocidad -= aceleracion * 0.6f * Time.deltaTime;
+         else 
             velocidad += aceleracion * Time.deltaTime;
-        }
-        float rotacion = Input.acceleration.x;
-        _transform.Rotate(Vector3.up, rotacion * sensiGiro);
+        
+         rotacion = Remap(Input.acceleration.x,-0.3f,0.3f,-1.0f,1.0f);
+        
     }
 
     private void InputsTeclas() {
-        if (Input.GetKey(KeyCode.Space)) {
-            velocidad -= aceleracion * 0.5f * Time.deltaTime;
-        } else {
+        if (Input.GetKey(KeyCode.Space)) 
+            velocidad -= aceleracion * 0.6f * Time.deltaTime;
+        else 
             velocidad += aceleracion * Time.deltaTime;
-        }
-        float rotacion = Input.GetAxis("Horizontal");
-        _transform.Rotate(Vector3.up, rotacion * sensiGiro);
+        
+        rotacion = Input.GetAxis("Horizontal");
     }
 
     protected void OnGUI() {
         GUI.skin.label.fontSize = Screen.width / 40;
-
-        /*GUILayout.Label("Orientation: " + Screen.orientation);
-        if (isPhone) {
-            GUILayout.Label("Acelerometro: " + Input.acceleration);
-        }*/
+        
         GUILayout.Label("iphone width/font: " + Screen.width + " : " + GUI.skin.label.fontSize);
         GUILayout.Label("CurrentSpeed: " + velocidadActual);
         if(isPhone)
