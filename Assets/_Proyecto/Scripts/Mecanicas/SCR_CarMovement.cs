@@ -7,10 +7,12 @@ public class SCR_CarMovement : MonoBehaviour
 {
     [SerializeField] float aceleracion = 1.0f, velocidadMax = 1.0f;
     [SerializeField,Range(0.0f,1.0f)]float sensiGiro = 1.0f;
-    Vector3 direccionfinal;
+    [SerializeField] Transform _modelo = default;
+    Vector3 direccionfinal,rotacionEuler;
+    Quaternion desiredRot;
     Transform _transform;
     Rigidbody _rb;
-    float velocidad=0, velocidadActual=0.0f, rotacion=0.0f;
+    float velocidad = 0, velocidadActual = 0.0f, rotacion = 0.0f, tiltamount;
 
     public bool isPhone = false;
 
@@ -30,12 +32,15 @@ public class SCR_CarMovement : MonoBehaviour
         else
             InputsTeclas();
 
-        velocidad = Mathf.Clamp(velocidad, -velocidadMax* 0.1f, velocidadMax);
+        
+        velocidad = Mathf.Clamp(velocidad, -velocidadMax* 0.05f , velocidadMax);
+
+        TiltCar();
 
         if (velocidad != 0) {
             velocidadActual = velocidad / velocidadMax;
             float multiplicadorgiro = Remap(velocidadActual, 0, 1, 6, 1);
-            //print(multiplicadorgiro);
+            
             _transform.Rotate(Vector3.up, rotacion * sensiGiro * multiplicadorgiro);
         }
 
@@ -53,9 +58,8 @@ public class SCR_CarMovement : MonoBehaviour
             velocidad -= aceleracion * 0.6f * Time.deltaTime;
          else 
             velocidad += aceleracion * Time.deltaTime;
-        
+
          rotacion = Remap(Input.acceleration.x,-0.3f,0.3f,-1.0f,1.0f);
-        
     }
 
     private void InputsTeclas() {
@@ -72,12 +76,21 @@ public class SCR_CarMovement : MonoBehaviour
         
         GUILayout.Label("iphone width/font: " + Screen.width + " : " + GUI.skin.label.fontSize);
         GUILayout.Label("CurrentSpeed: " + velocidadActual);
+        GUILayout.Label("currentTilt: " + tiltamount);
         if(isPhone)
             GUILayout.Label("PhoneModeActivated");
     }
 
     public void toggleIsPhone() {
         isPhone = !isPhone;
+    }
+
+    void TiltCar() 
+    {
+        tiltamount = -rotacion * 15.0f * velocidadActual;
+        rotacionEuler = (Vector3.up * 180.0f) + Vector3.forward * tiltamount;
+        desiredRot = Quaternion.Euler(rotacionEuler);//Quaternion.Euler(_transform.rotation.x,_transform.rotation.y , _transform.rotation.z);
+        _modelo.localRotation = desiredRot;//Quaternion.Lerp(_modelo.rotation, desiredRot, Time.deltaTime * rotationSpeed);
     }
 
     public static float Remap(float value, float min, float max, float newMin, float newMax) {
@@ -94,4 +107,7 @@ public class SCR_CarMovement : MonoBehaviour
         return to;
     }
 
+    private void OnCollisionEnter(Collision collision) {
+       
+    }
 }
