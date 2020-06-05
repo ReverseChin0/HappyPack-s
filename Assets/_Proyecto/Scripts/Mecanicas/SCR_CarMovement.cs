@@ -2,18 +2,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SCR_CarMovement : MonoBehaviour
 {
     [SerializeField] float aceleracion = 1.0f, velocidadMax = 1.0f;
     [SerializeField,Range(0.0f,1.0f)]float sensiGiro = 1.0f;
     [SerializeField] Transform _modelo = default;
+    [SerializeField] Image imgLife, imgGasoline;
     Vector3 direccionfinal,rotacionEuler;
     Quaternion desiredRot;
     Transform _transform;
     Rigidbody _rb;
-    float velocidad = 0, velocidadActual = 0.0f, rotacion = 0.0f, tiltamount;
-
+    float velocidad = 0, velocidadActual = 0.0f, rotacion = 0.0f, tiltamount, gaspoints = 1.0f;
+    int maxHp = 100, hp = 100;
     public bool isPhone = false;
 
     private void Awake() {
@@ -38,11 +40,14 @@ public class SCR_CarMovement : MonoBehaviour
         TiltCar();
 
         if (velocidad != 0) {
+            gaspoints -= 0.0001f;
+            imgGasoline.fillAmount = gaspoints; 
             velocidadActual = velocidad / velocidadMax;
             float multiplicadorgiro = Remap(velocidadActual, 0, 1, 6, 1);
             
             _transform.Rotate(Vector3.up, rotacion * sensiGiro * multiplicadorgiro);
         }
+
 
         direccionfinal = transform.forward * velocidad;
     }
@@ -56,8 +61,11 @@ public class SCR_CarMovement : MonoBehaviour
     {
         if (Input.touchCount > 0) 
             velocidad -= aceleracion * 0.6f * Time.deltaTime;
-         else 
-            velocidad += aceleracion * Time.deltaTime;
+        else {
+            if (gaspoints > 0)
+                velocidad += aceleracion * Time.deltaTime;
+        } 
+            
 
          rotacion = Remap(Input.acceleration.x,-0.3f,0.3f,-1.0f,1.0f);
     }
@@ -65,8 +73,10 @@ public class SCR_CarMovement : MonoBehaviour
     private void InputsTeclas() {
         if (Input.GetKey(KeyCode.Space)) 
             velocidad -= aceleracion * 0.6f * Time.deltaTime;
-        else 
+        else {
+            if(gaspoints>0)
             velocidad += aceleracion * Time.deltaTime;
+        }
         
         rotacion = Input.GetAxis("Horizontal");
     }
@@ -93,6 +103,24 @@ public class SCR_CarMovement : MonoBehaviour
         _modelo.localRotation = desiredRot;//Quaternion.Lerp(_modelo.rotation, desiredRot, Time.deltaTime * rotationSpeed);
     }
 
+    void TakeDmg(int _dmg) 
+    {
+        if (hp > 0) {
+            hp -= _dmg;
+            imgLife.fillAmount = hp * 0.01f;
+            if (hp <= 0) {
+                //Morir
+            }
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision) {
+        if (collision.collider.CompareTag("Obstaculo")) {
+            velocidad = Mathf.Min(velocidad, velocidadMax * 0.2f);
+            TakeDmg(10);
+        }
+    }
+
     public static float Remap(float value, float min, float max, float newMin, float newMax) {
         var fromAbs = value - min;
         var fromMaxAbs = max - min;
@@ -105,9 +133,5 @@ public class SCR_CarMovement : MonoBehaviour
         var to = toAbs + newMin;
 
         return to;
-    }
-
-    private void OnCollisionEnter(Collision collision) {
-       
     }
 }
