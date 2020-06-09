@@ -15,9 +15,15 @@ public class SCR_CameraFollow : MonoBehaviour
         _tran = transform;    
     }
 
-    private void LateUpdate() {
+    private void FixedUpdate() {
+        _tran.position = Vector3.SmoothDamp(_tran.position, targetPoint.position, ref velo, smoothTime);
+        Vector3 direccion = targetToLook.position - _tran.position;
+        _tran.rotation = Quaternion.LookRotation(direccion, Vector3.up);
+    }
+
+    /*private void LateUpdate() {
         _tran.position = Vector3.SmoothDamp(_tran.position, targetPoint.position, ref velo, smoothTime);
         Vector3 direccion = targetToLook.position - _tran.position;
         _tran.rotation = Quaternion.LookRotation(direccion,Vector3.up);
-    }
+    }*/
 }
