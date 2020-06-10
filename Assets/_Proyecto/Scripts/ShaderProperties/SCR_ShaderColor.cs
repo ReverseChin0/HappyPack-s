@@ -3,19 +3,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShaderColor : MonoBehaviour
+public class SCR_ShaderColor : MonoBehaviour
 {
     [SerializeField, ColorUsage(true, true)] Color color;
     [SerializeField] string colorString = "_color", floatOnTrigger = "_alphaVal";
     [SerializeField] float desde = 1.0f, hasta = 0.0f , duracion = 1.0f;
+    bool deactivar = false;
     float alpha = 0;
     Renderer miRenderer;
     MaterialPropertyBlock miProp;
+    Collider colli;
 
     private void Awake() 
     {
         miRenderer = GetComponent<Renderer>();
         miProp = new MaterialPropertyBlock();
+        colli = GetComponent<Collider>();
     }
 
     private void Start() 
@@ -24,11 +27,15 @@ public class ShaderColor : MonoBehaviour
         miRenderer.SetPropertyBlock(miProp);
     }
 
-    private void OnTriggerEnter(Collider other) 
-    {
-        if (other.CompareTag("Player")) {
-            DOTween.To(UpdatePropBlock,desde,hasta, duracion).SetEase(Ease.OutExpo);
-        }
+    public void Deactivate(bool _goCompleto) {
+        colli.enabled = false;
+        deactivar = _goCompleto;
+        DOTween.To(UpdatePropBlock, desde, hasta, duracion).SetEase(Ease.OutExpo).OnComplete(Disable);
+    }
+
+    void Disable() {
+        colli.enabled = true;
+        gameObject.SetActive(!deactivar);
     }
 
     void UpdatePropBlock(float aplha) {

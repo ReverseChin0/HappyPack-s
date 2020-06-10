@@ -9,14 +9,14 @@ public class SCR_CarMovement : MonoBehaviour
     [SerializeField] float aceleracion = 1.0f, velocidadMax = 1.0f;
     [SerializeField,Range(0.0f,1.0f)]float sensiGiro = 1.0f;
     [SerializeField] Transform _modelo = default;
-    [SerializeField] Image imgLife, imgGasoline;
+    [SerializeField] Image imgLife = default, imgGasoline = default;
     Vector3 direccionfinal,rotacionEuler;
     Quaternion desiredRot;
     Transform _transform;
     Rigidbody _rb;
     float velocidad = 0, velocidadActual = 0.0f, rotacion = 0.0f, tiltamount, gaspoints = 1.0f;
     int maxHp = 100, hp = 100;
-    public bool isPhone = false;
+    public bool isPhone = false, isStoped = false;
 
     private void Awake() {
         _rb = GetComponent<Rigidbody>();
@@ -34,8 +34,10 @@ public class SCR_CarMovement : MonoBehaviour
         else
             InputsTeclas();
 
-        
-        velocidad = Mathf.Clamp(velocidad, -velocidadMax* 0.05f , velocidadMax);
+        if(!isStoped)
+            velocidad = Mathf.Clamp(velocidad, -velocidadMax* 0.05f , velocidadMax);
+        else 
+            velocidad = 0; 
 
         TiltCar();
 
@@ -47,7 +49,6 @@ public class SCR_CarMovement : MonoBehaviour
             
             _transform.Rotate(Vector3.up, rotacion * sensiGiro * multiplicadorgiro);
         }
-
 
         direccionfinal = transform.forward * velocidad;
     }
@@ -110,6 +111,7 @@ public class SCR_CarMovement : MonoBehaviour
             imgLife.fillAmount = hp * 0.01f;
             if (hp <= 0) {
                 //Morir
+                hp = maxHp;
             }
         }
     }
