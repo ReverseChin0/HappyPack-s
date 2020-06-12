@@ -33,4 +33,8 @@ public class SCR_MissionPointData : MonoBehaviour
         mishader.Deactivate(_goCompleto);
         misionPropia.RandomizarMision();
     }
+
+    public void Hide_Unhide(bool _hide) {
+        mishader.Deactivate(_hide);
+    }
 }

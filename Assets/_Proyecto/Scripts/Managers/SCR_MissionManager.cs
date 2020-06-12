@@ -9,6 +9,7 @@ public class SCR_MissionManager : MonoBehaviour, INotificable
     [SerializeField] GameObject BeginPref = default, EndPref = default;
     [SerializeField] GameObject MissionPopUp = default;
     SCR_MissionPointData[] missionPoints = default;
+    SCR_ShaderColor finMision = default;
     SCR_MissionData currentMission = default;
     TextMeshProUGUI tituloTMP = default, descripTMP = default;
     SCR_CarMovement player;
@@ -32,6 +33,7 @@ public class SCR_MissionManager : MonoBehaviour, INotificable
 
         GameObject go, endpoint;
         endpoint = Instantiate(EndPref, Vector3.zero, Quaternion.identity);
+        finMision = endpoint.GetComponent<SCR_ShaderColor>();
         for (int i = 0; i < maxMisiones; i++) {
             int selector = Random.Range(0, length);
 
@@ -68,10 +70,35 @@ public class SCR_MissionManager : MonoBehaviour, INotificable
         player.isStoped = false;
         MissionPopUp.SetActive(false);
         missionPoints[current].Disable(true);
+        
+        for (int i = 0; i < missionPoints.Length; i++){
+            if (missionPoints[i] != null) {
+                if (current != i){
+                    missionPoints[i].Hide_Unhide(true);
+                } else {
+                    ocupados[i] = false;
+                    int selector = Random.Range(0, missionPoints.Length);
+
+                    while (ocupados[selector] == true)
+                        selector = Random.Range(0, missionPoints.Length);
+
+                    ocupados[selector] = true;
+                    missionPoints[i].transform.position = puntosInicio[selector].position;
+                }
+            } 
+        }
+        finMision.gameObject.SetActive(true);
+        finMision.Hide(false);
     }
 
     public void Rechazar() {
         player.isStoped = false;
         MissionPopUp.SetActive(false);
+    }
+
+    IEnumerator cambiarPos() {
+
+        yield return new WaitForSeconds(2.0f);
+
     }
 }

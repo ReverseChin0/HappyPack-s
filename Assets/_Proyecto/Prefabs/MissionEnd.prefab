@@ -106,5 +106,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7715c62784ab0ce43b74d53b29d9efe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  color: {r: 0.28235295, g: 2.9960785, b: 2.3215687, a: 0}
+  color: {r: 0, g: 2.6037736, b: 0.5445863, a: 0}
   colorString: _color
+  floatOnTrigger: _alphaVal
+  desde: 1
+  hasta: 0
+  duracion: 1

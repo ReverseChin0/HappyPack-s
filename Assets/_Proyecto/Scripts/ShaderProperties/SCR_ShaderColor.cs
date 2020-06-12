@@ -33,13 +33,18 @@ public class SCR_ShaderColor : MonoBehaviour
         DOTween.To(UpdatePropBlock, desde, hasta, duracion).SetEase(Ease.OutExpo).OnComplete(Disable);
     }
 
+    public void Hide(bool _hide) {
+        colli.enabled = !_hide;
+        DOTween.To(UpdatePropBlock, _hide ? desde : hasta, _hide ? hasta : desde, duracion).SetEase(Ease.OutExpo);
+    }
+
     void Disable() {
         colli.enabled = true;
         gameObject.SetActive(!deactivar);
     }
 
     void UpdatePropBlock(float aplha) {
-        print(aplha);
+        //print(aplha);
         miProp.SetFloat(floatOnTrigger, aplha);
         miRenderer.SetPropertyBlock(miProp);
     }
