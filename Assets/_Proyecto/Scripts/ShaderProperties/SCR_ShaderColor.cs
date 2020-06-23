@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class SCR_ShaderColor : MonoBehaviour
 {
-    [SerializeField, ColorUsage(true, true)] Color color;
+    [SerializeField, ColorUsage(true, true)] Color color = default;
     [SerializeField] string colorString = "_color", floatOnTrigger = "_alphaVal";
     [SerializeField] float desde = 1.0f, hasta = 0.0f , duracion = 1.0f;
     bool deactivar = false;

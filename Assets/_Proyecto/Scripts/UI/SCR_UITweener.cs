@@ -22,17 +22,17 @@ public class SCR_UITweener : MonoBehaviour
     [SerializeField] private bool reproducirStart = false;
     [SerializeField] private bool reproducirEnable = false;
     [SerializeField] private bool usarPosicionInicial = false;
+    [SerializeField] private bool unscaleTime = false;
     [SerializeField] private bool loops = false;
     [SerializeField] private float delay = 0.0f, duracion = 0.5f;
     [SerializeField] private TipoDeTween tipoTween = TipoDeTween.Mover;
     [SerializeField] private Ease tipoDeSuavizado = default;
-    [SerializeField] private Vector2 posfinal=default;
-    [SerializeField] Vector2 posInicial=default;
+    [SerializeField] private Vector2 posfinal = default;
+    [SerializeField] Vector2 posInicial = default;
     RectTransform rectTransform = default;
     CanvasGroup cGroup = default;
 
-    private void Awake() 
-    {
+    private void Awake() {
         rectTransform = GetComponent<RectTransform>();
 
         if (tipoTween == TipoDeTween.Desvanecer) {
@@ -42,25 +42,21 @@ public class SCR_UITweener : MonoBehaviour
         }
     }
 
-    private void Start() 
-    {
+    private void Start() {
         if (!usarPosicionInicial)
             posInicial = rectTransform.anchoredPosition;
 
         if (reproducirStart)
-        Reproducir();
+            Reproducir();
     }
 
-    private void OnEnable() 
-    {
+    private void OnEnable() {
         if (reproducirEnable)
             Reproducir();
     }
 
-    public void Reproducir() 
-    {
-        switch (tipoTween) 
-        {
+    public void Reproducir() {
+        switch (tipoTween) {
             case TipoDeTween.Mover:
                 if (usarPosicionInicial)
                     rectTransform.anchoredPosition = posInicial;
@@ -68,7 +64,8 @@ public class SCR_UITweener : MonoBehaviour
                 rectTransform.
                     DOAnchorPos(posfinal, duracion).
                     SetDelay(delay).
-                    SetEase(tipoDeSuavizado).SetLoops(loops ? -1 : 0);
+                    SetEase(tipoDeSuavizado).SetLoops(loops ? -1 : 0).
+                    SetUpdate(unscaleTime);
                 break;
 
             case TipoDeTween.Escalar:
@@ -76,10 +73,11 @@ public class SCR_UITweener : MonoBehaviour
                     rectTransform.localScale = new Vector3(posInicial.x, posInicial.y, 0);
 
                 rectTransform.
-                    DOScale(new Vector3(posfinal.x,posfinal.y,0),duracion).
+                    DOScale(new Vector3(posfinal.x, posfinal.y, 0), duracion).
                     SetDelay(delay).
                     SetEase(tipoDeSuavizado).
-                    SetLoops(loops ? -1:0);
+                    SetLoops(loops ? -1 : 0).
+                    SetUpdate(unscaleTime);
                 break;
 
             case TipoDeTween.Desvanecer:
@@ -87,10 +85,11 @@ public class SCR_UITweener : MonoBehaviour
                     cGroup.alpha = posInicial.x;
 
                 cGroup.
-                    DOFade(posfinal.x,duracion).
+                    DOFade(posfinal.x, duracion).
                     SetDelay(delay).
                     SetEase(tipoDeSuavizado).
-                    SetLoops(loops ? -1 : 0,LoopType.Yoyo);
+                    SetLoops(loops ? -1 : 0, LoopType.Yoyo).
+                    SetUpdate(unscaleTime);
                 break;
 
             case TipoDeTween.Saltar:
@@ -98,7 +97,7 @@ public class SCR_UITweener : MonoBehaviour
                     rectTransform.anchoredPosition = posInicial;
 
                 rectTransform.
-                    DOJumpAnchorPos(posfinal,100.0f,0,duracion).
+                    DOJumpAnchorPos(posfinal, 100.0f, 0, duracion).
                     SetDelay(delay).
                     SetLoops(loops ? -1 : 0);
                 break;
@@ -108,9 +107,10 @@ public class SCR_UITweener : MonoBehaviour
                     rectTransform.rotation = Quaternion.Euler(new Vector3(0, 0, posInicial.x));
 
                 rectTransform.
-                    DOLocalRotate(new Vector3(0,0,posfinal.x),duracion).
+                    DOLocalRotate(new Vector3(0, 0, posfinal.x), duracion).
                     SetEase(tipoDeSuavizado).
-                    SetLoops(loops ? -1 : 0,LoopType.Yoyo);
+                    SetLoops(loops ? -1 : 0, LoopType.Yoyo).
+                    SetUpdate(unscaleTime);
                 break;
 
             default:
@@ -118,8 +118,7 @@ public class SCR_UITweener : MonoBehaviour
         }
     }
 
-    public void Switch() 
-    {
+    public void Switch() {
         Vector2 temp = posInicial;
         posInicial = posfinal;
         posfinal = temp;
