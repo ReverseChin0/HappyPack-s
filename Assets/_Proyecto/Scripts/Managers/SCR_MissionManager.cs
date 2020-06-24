@@ -60,7 +60,7 @@ public class SCR_MissionManager : MonoBehaviour, INotificable
             i++;
         }
         currentMission =  missionPoints[current].getMission();
-        string descrip = currentMission.tipodeMision.ToString() + " en " + currentMission.MaxDuration + "segundos";
+        string descrip = getTipoMision(currentMission.tipodeMision) + " en " + currentMission.MaxDuration + " segundos";
         descripTMP.text = descrip;
         MissionPopUp.SetActive(true);
         player.isStoped = true;
@@ -88,6 +88,7 @@ public class SCR_MissionManager : MonoBehaviour, INotificable
             } 
         }
         finMision.gameObject.SetActive(true);
+        finMision.transform.position = puntosEntrega[Random.Range(0, puntosEntrega.Length)].position;
         finMision.Hide(false);
     }
 
@@ -97,8 +98,18 @@ public class SCR_MissionManager : MonoBehaviour, INotificable
     }
 
     IEnumerator cambiarPos() {
-
         yield return new WaitForSeconds(2.0f);
+    }
 
+    string getTipoMision(MisionType _tipo) {
+        string result="";
+        switch (_tipo) 
+        {
+            case MisionType.contraReloj: result = "Contra Reloj"; break;
+            case MisionType.noDanios: result = "Sin daños"; break;
+            case MisionType.sinFrenar: result = "Sin Frenar"; break;
+            default: break;
+        }
+        return result;
     }
 }

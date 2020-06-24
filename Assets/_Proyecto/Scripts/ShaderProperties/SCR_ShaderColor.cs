@@ -9,7 +9,7 @@ public class SCR_ShaderColor : MonoBehaviour
     [SerializeField] string colorString = "_color", floatOnTrigger = "_alphaVal";
     [SerializeField] float desde = 1.0f, hasta = 0.0f , duracion = 1.0f;
     bool deactivar = false;
-    float alpha = 0;
+    //float alpha = 0;
     Renderer miRenderer;
     MaterialPropertyBlock miProp;
     Collider colli;
@@ -33,18 +33,19 @@ public class SCR_ShaderColor : MonoBehaviour
         DOTween.To(UpdatePropBlock, desde, hasta, duracion).SetEase(Ease.OutExpo).OnComplete(Disable);
     }
 
-    public void Hide(bool _hide) {
+    public void Hide(bool _hide) { //esconde y desesconde
         colli.enabled = !_hide;
         DOTween.To(UpdatePropBlock, _hide ? desde : hasta, _hide ? hasta : desde, duracion).SetEase(Ease.OutExpo);
     }
 
-    void Disable() {
+    void Disable() //disabilita el gameobject y resetea el collider
+    {
         colli.enabled = true;
         gameObject.SetActive(!deactivar);
     }
 
-    void UpdatePropBlock(float aplha) {
-        //print(aplha);
+    void UpdatePropBlock(float aplha) 
+    {
         miProp.SetFloat(floatOnTrigger, aplha);
         miRenderer.SetPropertyBlock(miProp);
     }
