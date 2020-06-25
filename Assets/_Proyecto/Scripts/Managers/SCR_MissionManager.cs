@@ -11,6 +11,7 @@ public class SCR_MissionManager : MonoBehaviour, INotificable
     SCR_MissionPointData[] missionPoints = default;
     SCR_ShaderColor finMision = default;
     SCR_MissionData currentMission = default;
+    SCR_MissionEndPoint missionEndpoint = default;
     TextMeshProUGUI tituloTMP = default, descripTMP = default;
     SCR_CarMovement player;
     bool[] ocupados;
@@ -33,6 +34,8 @@ public class SCR_MissionManager : MonoBehaviour, INotificable
 
         GameObject go, endpoint;
         endpoint = Instantiate(EndPref, Vector3.zero, Quaternion.identity);
+        missionEndpoint = endpoint.GetComponent<SCR_MissionEndPoint>();
+        missionEndpoint.missionMana = this;
         finMision = endpoint.GetComponent<SCR_ShaderColor>();
         for (int i = 0; i < maxMisiones; i++) {
             int selector = Random.Range(0, length);
@@ -51,9 +54,11 @@ public class SCR_MissionManager : MonoBehaviour, INotificable
 
     public void Notificar(GameObject _go) 
     {   int i = 0;
-        foreach(SCR_MissionPointData mp in missionPoints) {
+        SCR_MissionPointData gomision = _go.GetComponent<SCR_MissionPointData>();
 
-            if (mp == _go.GetComponent<SCR_MissionPointData>()) 
+        foreach (SCR_MissionPointData mp in missionPoints) 
+        {
+            if (mp == gomision) 
             {
                 current = i;
             }
@@ -95,6 +100,15 @@ public class SCR_MissionManager : MonoBehaviour, INotificable
     public void Rechazar() {
         player.isStoped = false;
         MissionPopUp.SetActive(false);
+    }
+
+    public void FinMision() {
+        currentMission = null;
+        for (int i = 0; i < missionPoints.Length; i++) { //reactivamos los puntos de mision
+            if (missionPoints[i] != null) {
+                    missionPoints[i].Hide_Unhide(false);
+            }
+        }
     }
 
     IEnumerator cambiarPos() {

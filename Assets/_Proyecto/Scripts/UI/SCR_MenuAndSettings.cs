@@ -4,7 +4,7 @@ using UnityEngine.Rendering;
 public class SCR_MenuAndSettings : MonoBehaviour
 {
     [SerializeField] RenderPipelineAsset low = default, mid = default, high = default;
-    [SerializeField] AudioSource audioSource = default;
+    //[SerializeField] AudioSource audioSource = default;
 
     public void ChangeQuality(int level) {
         switch (level) {

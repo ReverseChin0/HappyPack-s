@@ -30,7 +30,7 @@ public class SCR_ShaderColor : MonoBehaviour
     public void Deactivate(bool _goCompleto) {
         colli.enabled = false;
         deactivar = _goCompleto;
-        DOTween.To(UpdatePropBlock, desde, hasta, duracion).SetEase(Ease.OutExpo).OnComplete(Disable);
+        DOTween.To(UpdatePropBlock, _goCompleto ? desde : hasta, _goCompleto ? hasta : desde, duracion).SetEase(Ease.OutExpo).OnComplete(Disable);
     }
 
     public void Hide(bool _hide) { //esconde y desesconde

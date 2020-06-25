@@ -881,7 +881,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.18523826, y: 0.18440892}
   m_AnchorMax: {x: 0.39000002, y: 0.3321822}
-  m_AnchoredPosition: {x: 0.40000153, y: 0.29999542}
+  m_AnchoredPosition: {x: 0.40000153, y: 0.30000305}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &704208328
@@ -1245,6 +1245,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1183186686}
   - component: {fileID: 1183186687}
+  - component: {fileID: 1183186688}
   m_Layer: 0
   m_Name: MisionHandler
   m_TagString: Untagged
@@ -1286,12 +1287,31 @@ MonoBehaviour:
   - {fileID: 264887954}
   - {fileID: 1594391514}
   - {fileID: 1779900497}
-  puntosEntrega: []
+  puntosEntrega:
+  - {fileID: 1371467690}
+  - {fileID: 1942201371}
+  - {fileID: 1017844874}
+  - {fileID: 1517818668}
+  - {fileID: 264887954}
+  - {fileID: 1594391514}
+  - {fileID: 1779900497}
   BeginPref: {fileID: 7601377954266469674, guid: 32ba23982b3b9e44b9730cf7871f8424,
     type: 3}
   EndPref: {fileID: 659818771281365809, guid: 083d45943a6d62e4da3c19bcf1c2e80f, type: 3}
   MissionPopUp: {fileID: 1217745084}
   maxMisiones: 3
+--- !u!114 &1183186688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1183186685}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a3203d6be908b84fb20cb1a6362d430, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1193396005
 GameObject:
   m_ObjectHideFlags: 0
