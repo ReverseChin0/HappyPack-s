@@ -168,6 +168,8 @@ public class SCR_MissionManager : MonoBehaviour, INotificable
                 missionPoints[i].Hide_Unhide(false);
             }
         }
+
+        missionEndpoint.Hide();
         timeImage.fillAmount = 0;
     }
 }

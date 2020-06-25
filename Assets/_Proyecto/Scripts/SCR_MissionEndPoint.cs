@@ -20,4 +20,9 @@ public class SCR_MissionEndPoint : MonoBehaviour
             mishader.Hide(true);
         }
     }
+
+    public void Hide() 
+    {
+        mishader.Hide(true);
+    }
 }

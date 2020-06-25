@@ -20,7 +20,7 @@ public class SCR_MissionData
         Meta = _meta;
         int lenght = MisionType.GetNames(typeof(MisionType)).Length;
         tipodeMision = (MisionType)Random.Range(0, lenght);
-        MaxDuration = Random.Range(45, 90);
+        MaxDuration = Random.Range(45, 60);
         precioMision = (int)(Remap(MaxDuration, 45, 90, 1, 1.5f) * 50.0f);
     }
 
@@ -41,7 +41,7 @@ public class SCR_MissionData
     {
         int lenght = MisionType.GetNames(typeof(MisionType)).Length;
         tipodeMision = (MisionType)Random.Range(0, lenght);
-        MaxDuration = Random.Range(45, 90);
+        MaxDuration = Random.Range(45, 60);
         precioMision = (int)(Remap(MaxDuration, 45, 90, 1, 1.5f) * 50.0f);
     }
 
