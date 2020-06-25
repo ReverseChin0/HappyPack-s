@@ -2,19 +2,24 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SCR_MissionManager : MonoBehaviour, INotificable
 {
     [SerializeField] Transform[] puntosInicio = default, puntosEntrega = default;
     [SerializeField] GameObject BeginPref = default, EndPref = default;
     [SerializeField] GameObject MissionPopUp = default;
+    [SerializeField] Image timeImage = default;
     SCR_MissionPointData[] missionPoints = default;
-    SCR_ShaderColor finMision = default;
-    SCR_MissionData currentMission = default;
     SCR_MissionEndPoint missionEndpoint = default;
+    SCR_MissionData currentMission = default;
+    SCR_PlayerProgress PlayerStats = default;
+    SCR_ShaderColor finMision = default;
     TextMeshProUGUI tituloTMP = default, descripTMP = default;
     SCR_CarMovement player;
     bool[] ocupados;
+    bool enMision = false;
+    float tiempoMision = 0, tiempoActual=0;
     public int maxMisiones = 3;
     int current = 0;
 
@@ -22,6 +27,7 @@ public class SCR_MissionManager : MonoBehaviour, INotificable
         player = FindObjectOfType<SCR_CarMovement>();
         tituloTMP = MissionPopUp.transform.Find("Titulo").GetComponent<TextMeshProUGUI>();
         descripTMP = MissionPopUp.transform.Find("Descripcion").GetComponent<TextMeshProUGUI>();
+        PlayerStats = GetComponent<SCR_PlayerProgress>();
     }
 
     private void Start() 
@@ -52,6 +58,21 @@ public class SCR_MissionManager : MonoBehaviour, INotificable
         endpoint.SetActive(false);
     }
 
+    private void Update() 
+    {
+        if (enMision) 
+        {
+            tiempoActual -= 1 * Time.deltaTime;
+
+            if (tiempoActual <= 0) 
+            {
+                MisionFallida();
+                return;
+            }
+            timeImage.fillAmount = tiempoActual / tiempoMision;
+        }
+    }
+
     public void Notificar(GameObject _go) 
     {   int i = 0;
         SCR_MissionPointData gomision = _go.GetComponent<SCR_MissionPointData>();
@@ -71,7 +92,10 @@ public class SCR_MissionManager : MonoBehaviour, INotificable
         player.isStoped = true;
     }
 
-    public void Aceptar() {
+    public void Aceptar() 
+    {
+        enMision = true;//para poder contar el tiempo
+        
         player.isStoped = false;
         MissionPopUp.SetActive(false);
         missionPoints[current].Disable(true);
@@ -95,6 +119,7 @@ public class SCR_MissionManager : MonoBehaviour, INotificable
         finMision.gameObject.SetActive(true);
         finMision.transform.position = puntosEntrega[Random.Range(0, puntosEntrega.Length)].position;
         finMision.Hide(false);
+        tiempoActual = tiempoMision = currentMission.MaxDuration;
     }
 
     public void Rechazar() {
@@ -102,18 +127,23 @@ public class SCR_MissionManager : MonoBehaviour, INotificable
         MissionPopUp.SetActive(false);
     }
 
-    public void FinMision() {
+    public void FinMision() 
+    {
+        enMision = false;
+        PlayerStats.AddMoney(currentMission.precioMision);
+        PlayerStats.SaveStats();
         currentMission = null;
         for (int i = 0; i < missionPoints.Length; i++) { //reactivamos los puntos de mision
             if (missionPoints[i] != null) {
                     missionPoints[i].Hide_Unhide(false);
             }
         }
+        timeImage.fillAmount = 0;
     }
 
-    IEnumerator cambiarPos() {
+    /*IEnumerator cambiarPos() {
         yield return new WaitForSeconds(2.0f);
-    }
+    }*/
 
     string getTipoMision(MisionType _tipo) {
         string result="";
@@ -125,5 +155,19 @@ public class SCR_MissionManager : MonoBehaviour, INotificable
             default: break;
         }
         return result;
+    }
+
+    void MisionFallida() 
+    {
+        enMision = false;
+        PlayerStats.AddMoney((int)(currentMission.precioMision * -0.25f));
+        PlayerStats.SaveStats();
+        currentMission = null;
+        for (int i = 0; i < missionPoints.Length; i++) { //reactivamos los puntos de mision
+            if (missionPoints[i] != null) {
+                missionPoints[i].Hide_Unhide(false);
+            }
+        }
+        timeImage.fillAmount = 0;
     }
 }

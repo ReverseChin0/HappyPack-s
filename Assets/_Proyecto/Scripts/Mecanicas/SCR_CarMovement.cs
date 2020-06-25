@@ -42,7 +42,7 @@ public class SCR_CarMovement : MonoBehaviour
         TiltCar();
 
         if (velocidad != 0) {
-            gaspoints -= 0.0001f;
+            if(velocidad > 0)gaspoints -= 0.0001f;
             imgGasoline.fillAmount = gaspoints; 
             velocidadActual = velocidad / velocidadMax;
             float multiplicadorgiro = Remap(velocidadActual, 0, 1, 6, 1);
@@ -82,7 +82,7 @@ public class SCR_CarMovement : MonoBehaviour
         rotacion = Input.GetAxis("Horizontal");
     }
 
-    protected void OnGUI() {
+    /*protected void OnGUI() {
         GUI.skin.label.fontSize = Screen.width / 40;
         
         GUILayout.Label("iphone width/font: " + Screen.width + " : " + GUI.skin.label.fontSize);
@@ -90,7 +90,7 @@ public class SCR_CarMovement : MonoBehaviour
         GUILayout.Label("currentTilt: " + tiltamount);
         if(isPhone)
             GUILayout.Label("PhoneModeActivated");
-    }
+    }*/
 
     public void toggleIsPhone() {
         isPhone = !isPhone;
