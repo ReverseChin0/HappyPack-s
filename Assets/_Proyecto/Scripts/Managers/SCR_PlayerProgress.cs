@@ -46,16 +46,20 @@ public class SCR_PlayerProgress : MonoBehaviour
         PlayerPrefs.SetInt("dinero", dinerActual);
         PlayerPrefs.SetInt("misiones", misiActual);
         genericSequ = DOTween.Sequence();
-        genericSequ.Append(saveIcon.DOFade(1, 0.35f))
-                    .Append(saveIcon.DOFade(.1f, 0.1f))
-                    .Append(saveIcon.DOFade(1, 0.35f))
-                    .Append(saveIcon.DOFade(0f, 0.1f));
+        genericSequ.Append(saveIcon.DOFade(1, 0.4f))
+                    .Append(saveIcon.DOFade(.1f, 0.2f))
+                    .Append(saveIcon.DOFade(1, 0.4f))
+                    .Append(saveIcon.DOFade(.1f, 0.2f))
+                    .Append(saveIcon.DOFade(1, 0.4f))
+                    .Append(saveIcon.DOFade(0f, 0.2f));
     }
 
     //[ContextMenu("addmoney")]
     public void AddMoney(int _cantidad) 
     {
+        Debug.LogWarning("addmoney");
         dinerActual += _cantidad;
+        if (dinerActual < 0) dinerActual = 0;
         txt_additionMoney.color = _cantidad > 0 ? new Color(0.0f, 0.8f, 0.0f) : new Color(0.8f, 0.0f, 0.0f); //elige color basado en si gana o pierde dinero
         txt_additionMoney.text = "+ $ " + _cantidad.ToString(); //pone texto de adicion
         txt_dinero.text = "$ " + dinerActual.ToString(); //pone texto de dinero

@@ -10,6 +10,7 @@ public class SCR_CarMovement : MonoBehaviour
     [SerializeField,Range(0.0f,1.0f)]float sensiGiro = 1.0f;
     [SerializeField] Transform _modelo = default, _spawnPoint = default;
     [SerializeField] Image imgLife = default, imgGasoline = default;
+    [SerializeField] SCR_PlayerProgress playStats = default;
     Vector3 direccionfinal,rotacionEuler;
     Quaternion desiredRot;
     Transform _transform;
@@ -21,6 +22,7 @@ public class SCR_CarMovement : MonoBehaviour
     private void Awake() {
         _rb = GetComponent<Rigidbody>();
         _transform = transform;
+        if(playStats!=null) playStats = FindObjectOfType<SCR_PlayerProgress>();
     }
 
     private void Start() {
@@ -45,7 +47,7 @@ public class SCR_CarMovement : MonoBehaviour
             if(velocidad > 0)gaspoints -= 0.0001f;
             imgGasoline.fillAmount = gaspoints; 
             velocidadActual = velocidad / velocidadMax;
-            float multiplicadorgiro = Remap(velocidadActual, 0, 1, 6, 1);
+            float multiplicadorgiro = Remap(velocidadActual, 0, 1, 4, 1);
             
             _transform.Rotate(Vector3.up, rotacion * sensiGiro * multiplicadorgiro);
         }
@@ -55,6 +57,7 @@ public class SCR_CarMovement : MonoBehaviour
         if(_transform.position.y < treshold) {
             _transform.position = _spawnPoint.position;
             isStoped = true;
+            if (playStats != null) playStats.AddMoney(-20);
             StartCoroutine(resetearVehiculo(2.0f));
         }
     }
@@ -82,6 +85,11 @@ public class SCR_CarMovement : MonoBehaviour
         else {
             if(gaspoints>0)
             velocidad += aceleracion * Time.deltaTime;
+            else {
+                transform.position = _spawnPoint.position;
+                if (playStats != null) playStats.AddMoney(-100);
+                gaspoints = 1;
+            }
         }
         
         rotacion = Input.GetAxis("Horizontal");
