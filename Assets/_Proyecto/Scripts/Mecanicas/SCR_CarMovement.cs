@@ -6,9 +6,9 @@ using UnityEngine.UI;
 
 public class SCR_CarMovement : MonoBehaviour
 {
-    [SerializeField] float aceleracion = 1.0f, velocidadMax = 1.0f;
+    [SerializeField] float aceleracion = 1.0f, velocidadMax = 1.0f, treshold = -20.0f;
     [SerializeField,Range(0.0f,1.0f)]float sensiGiro = 1.0f;
-    [SerializeField] Transform _modelo = default;
+    [SerializeField] Transform _modelo = default, _spawnPoint = default;
     [SerializeField] Image imgLife = default, imgGasoline = default;
     Vector3 direccionfinal,rotacionEuler;
     Quaternion desiredRot;
@@ -51,6 +51,12 @@ public class SCR_CarMovement : MonoBehaviour
         }
 
         direccionfinal = transform.forward * velocidad;
+
+        if(_transform.position.y < treshold) {
+            _transform.position = _spawnPoint.position;
+            isStoped = true;
+            StartCoroutine(resetearVehiculo(2.0f));
+        }
     }
 
     private void FixedUpdate() 
@@ -66,14 +72,13 @@ public class SCR_CarMovement : MonoBehaviour
             if (gaspoints > 0)
                 velocidad += aceleracion * Time.deltaTime;
         } 
-            
 
-         rotacion = Remap(Input.acceleration.x,-0.3f,0.3f,-1.0f,1.0f);
+        rotacion = Remap(Input.acceleration.x,-0.3f,0.3f,-1.0f,1.0f);
     }
 
     private void InputsTeclas() {
         if (Input.GetKey(KeyCode.Space)) 
-            velocidad -= aceleracion * 0.6f * Time.deltaTime;
+            velocidad -= aceleracion * 0.7f * Time.deltaTime;
         else {
             if(gaspoints>0)
             velocidad += aceleracion * Time.deltaTime;
@@ -111,9 +116,24 @@ public class SCR_CarMovement : MonoBehaviour
             imgLife.fillAmount = hp * 0.01f;
             if (hp <= 0) {
                 //Morir
+                _transform.position = _spawnPoint.position;
                 hp = maxHp;
             }
         }
+    }
+
+    public bool AddGas(float _gas) {
+        gaspoints += _gas;
+        if (gaspoints > 1.0f) 
+        {
+            gaspoints = 1.0f;
+            return false; //regresa false si ya no se le puede añadir mas
+        } 
+        else 
+        {
+            return true;//regresa true si aun se le puede añadir mas
+        }
+
     }
 
     private void OnCollisionEnter(Collision collision) {
@@ -121,6 +141,11 @@ public class SCR_CarMovement : MonoBehaviour
             velocidad = Mathf.Min(velocidad, velocidadMax * 0.2f);
             TakeDmg(10);
         }
+    }
+
+    IEnumerator resetearVehiculo(float _valor) {
+        yield return new WaitForSeconds(_valor);
+        isStoped = false;
     }
 
     public static float Remap(float value, float min, float max, float newMin, float newMax) {

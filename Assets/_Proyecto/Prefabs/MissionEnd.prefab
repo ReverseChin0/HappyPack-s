@@ -107,7 +107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7715c62784ab0ce43b74d53b29d9efe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  color: {r: 0, g: 2.6037736, b: 0.5445863, a: 0}
+  color: {r: 0, g: 1.4980392, b: 0.3137255, a: 0}
   colorString: _color
   floatOnTrigger: _alphaVal
   desde: 1
@@ -125,3 +125,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 118fb42c0c6cc0f40920ef3f4fc13fec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  missionMana: {fileID: 0}
