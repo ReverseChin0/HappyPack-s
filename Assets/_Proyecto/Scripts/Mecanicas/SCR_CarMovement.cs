@@ -6,11 +6,12 @@ using UnityEngine.UI;
 
 public class SCR_CarMovement : MonoBehaviour
 {
-    [SerializeField] float aceleracion = 1.0f, velocidadMax = 1.0f, treshold = -20.0f;
+    [SerializeField] float aceleracion = 1.0f, velocidadMax = 1.0f, fallTreshold = -20.0f;
     [SerializeField,Range(0.0f,1.0f)]float sensiGiro = 1.0f;
     [SerializeField] Transform _modelo = default, _spawnPoint = default;
     [SerializeField] Image imgLife = default, imgGasoline = default;
     [SerializeField] SCR_PlayerProgress playStats = default;
+    [SerializeField] GameObject[] packs = default;
     Vector3 direccionfinal,rotacionEuler;
     Quaternion desiredRot;
     Transform _transform;
@@ -25,7 +26,8 @@ public class SCR_CarMovement : MonoBehaviour
         if(playStats!=null) playStats = FindObjectOfType<SCR_PlayerProgress>();
     }
 
-    private void Start() {
+    private void Start() 
+    {
         
     }
 
@@ -37,7 +39,7 @@ public class SCR_CarMovement : MonoBehaviour
             InputsTeclas();
 
         if(!isStoped)
-            velocidad = Mathf.Clamp(velocidad, -velocidadMax* 0.05f , velocidadMax);
+            velocidad = Mathf.Clamp(velocidad, 0, velocidadMax);
         else 
             velocidad = 0; 
 
@@ -47,14 +49,14 @@ public class SCR_CarMovement : MonoBehaviour
             if(velocidad > 0)gaspoints -= 0.0001f;
             imgGasoline.fillAmount = gaspoints; 
             velocidadActual = velocidad / velocidadMax;
-            float multiplicadorgiro = Remap(velocidadActual, 0, 1, 4, 1);
+            float multiplicadorgiro = Remap(velocidadActual, 0, 1, 2, 1);
             
             _transform.Rotate(Vector3.up, rotacion * sensiGiro * multiplicadorgiro);
         }
 
         direccionfinal = transform.forward * velocidad;
 
-        if(_transform.position.y < treshold) {
+        if(_transform.position.y < fallTreshold) {
             _transform.position = _spawnPoint.position;
             isStoped = true;
             if (playStats != null) playStats.AddMoney(-20);
@@ -70,40 +72,50 @@ public class SCR_CarMovement : MonoBehaviour
     private void InputsCelular() 
     {
         if (Input.touchCount > 0) 
-            velocidad -= aceleracion * 0.6f * Time.deltaTime;
-        else {
+        {
             if (gaspoints > 0)
-                velocidad += aceleracion * Time.deltaTime;
-        } 
-
-        rotacion = Remap(Input.acceleration.x,-0.3f,0.3f,-1.0f,1.0f);
-    }
-
-    private void InputsTeclas() {
-        if (Input.GetKey(KeyCode.Space)) 
-            velocidad -= aceleracion * 0.7f * Time.deltaTime;
-        else {
-            if(gaspoints>0)
-            velocidad += aceleracion * Time.deltaTime;
+                velocidad += aceleracion * 0.7f * Time.deltaTime;
             else {
                 transform.position = _spawnPoint.position;
                 if (playStats != null) playStats.AddMoney(-100);
                 gaspoints = 1;
             }
         }
+        else 
+        {
+            velocidad -= aceleracion * Time.deltaTime;
+        } 
+
+        rotacion = Remap(Input.acceleration.x,-0.3f,0.3f,-1.0f,1.0f);
+    }
+
+    private void InputsTeclas() {
+        if (Input.GetKey(KeyCode.Space)) {
+            if (gaspoints > 0)
+                velocidad += aceleracion * 0.7f * Time.deltaTime;
+            else {
+                transform.position = _spawnPoint.position;
+                if (playStats != null) playStats.AddMoney(-100);
+                gaspoints = 1;
+            }
+        }
+        else 
+        {
+            velocidad -= aceleracion * Time.deltaTime;  
+        }
         
         rotacion = Input.GetAxis("Horizontal");
     }
 
-    /*protected void OnGUI() {
+    protected void OnGUI() {
         GUI.skin.label.fontSize = Screen.width / 40;
         
-        GUILayout.Label("iphone width/font: " + Screen.width + " : " + GUI.skin.label.fontSize);
-        GUILayout.Label("CurrentSpeed: " + velocidadActual);
+        /*GUILayout.Label("iphone width/font: " + Screen.width + " : " + GUI.skin.label.fontSize);
+        GUILayout.Label("CurrentSpeed: " + velocidadActual);*/
         GUILayout.Label("currentTilt: " + tiltamount);
-        if(isPhone)
-            GUILayout.Label("PhoneModeActivated");
-    }*/
+        /*if(isPhone)
+            GUILayout.Label("PhoneModeActivated");*/
+    }
 
     public void toggleIsPhone() {
         isPhone = !isPhone;
@@ -139,7 +151,7 @@ public class SCR_CarMovement : MonoBehaviour
         } 
         else 
         {
-            return true;//regresa true si aun se le puede añadir mas
+            return true; //regresa true si aun se le puede añadir mas
         }
 
     }
@@ -156,7 +168,43 @@ public class SCR_CarMovement : MonoBehaviour
         isStoped = false;
     }
 
-    public static float Remap(float value, float min, float max, float newMin, float newMax) {
+    public void paquetesaOcultar(int _ind) 
+    {
+        if (packs.Length <= 0)
+            return;
+
+        switch (_ind) 
+        {
+            case 0:
+                packs[0].SetActive(false);
+                packs[1].SetActive(false);
+                packs[2].SetActive(false);
+                packs[3].SetActive(false);
+                break;
+            case 1:
+                packs[0].SetActive(true);
+                packs[1].SetActive(false);
+                packs[2].SetActive(false);
+                packs[3].SetActive(false);
+                break;
+            case 2:
+                packs[0].SetActive(true);
+                packs[1].SetActive(true);
+                packs[2].SetActive(false);
+                packs[3].SetActive(false);
+                break;
+            case 3:
+                packs[0].SetActive(true);
+                packs[1].SetActive(true);
+                packs[2].SetActive(true);
+                packs[3].SetActive(true);
+                break;
+            default:
+                break;
+        }
+    }
+
+    static float Remap(float value, float min, float max, float newMin, float newMax) {
         var fromAbs = value - min;
         var fromMaxAbs = max - min;
 

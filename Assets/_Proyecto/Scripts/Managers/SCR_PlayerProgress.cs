@@ -57,7 +57,7 @@ public class SCR_PlayerProgress : MonoBehaviour
     //[ContextMenu("addmoney")]
     public void AddMoney(int _cantidad) 
     {
-        Debug.LogWarning("addmoney");
+        //Debug.LogWarning("addmoney");
         dinerActual += _cantidad;
         if (dinerActual < 0) dinerActual = 0;
         txt_additionMoney.color = _cantidad > 0 ? new Color(0.0f, 0.8f, 0.0f) : new Color(0.8f, 0.0f, 0.0f); //elige color basado en si gana o pierde dinero

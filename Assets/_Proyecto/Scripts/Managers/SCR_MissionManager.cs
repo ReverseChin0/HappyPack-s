@@ -120,6 +120,7 @@ public class SCR_MissionManager : MonoBehaviour, INotificable
         finMision.transform.position = puntosEntrega[Random.Range(0, puntosEntrega.Length)].position;
         finMision.Hide(false);
         tiempoActual = tiempoMision = currentMission.MaxDuration;
+        player.paquetesaOcultar(currentMission.paqueteCount);
     }
 
     public void Rechazar() {
@@ -139,6 +140,7 @@ public class SCR_MissionManager : MonoBehaviour, INotificable
             }
         }
         timeImage.fillAmount = 0;
+        player.paquetesaOcultar(0);
     }
 
     /*IEnumerator cambiarPos() {
@@ -171,5 +173,6 @@ public class SCR_MissionManager : MonoBehaviour, INotificable
 
         missionEndpoint.Hide();
         timeImage.fillAmount = 0;
+        player.paquetesaOcultar(0);
     }
 }

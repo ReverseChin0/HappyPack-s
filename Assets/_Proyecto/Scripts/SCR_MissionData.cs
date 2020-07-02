@@ -15,6 +15,7 @@ public class SCR_MissionData
     public MisionType tipodeMision;
     public float MaxDuration;
     public int precioMision;
+    public int paqueteCount = 1;
 
     public SCR_MissionData(GameObject _meta) {
         Meta = _meta;
@@ -43,9 +44,10 @@ public class SCR_MissionData
         tipodeMision = (MisionType)Random.Range(0, lenght);
         MaxDuration = Random.Range(45, 60);
         precioMision = (int)(Remap(MaxDuration, 45, 90, 1, 1.5f) * 50.0f);
+        paqueteCount = Random.Range(1, 4);
     }
 
-    public static float Remap(float value, float min, float max, float newMin, float newMax) {
+    static float Remap(float value, float min, float max, float newMin, float newMax) {
         var fromAbs = value - min;
         var fromMaxAbs = max - min;
 
