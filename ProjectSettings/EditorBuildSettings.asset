@@ -5,18 +5,12 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
-    path: Assets/_Proyecto/Scenes/TestMenu.unity
-    guid: d1c3109bdb54ad54c8a2b2838528e640
-  - enabled: 0
-    path: Assets/_Proyecto/Scenes/CarMovement.unity
-    guid: 40e3ff8e619213545ae873ac2c8fcc1f
-  - enabled: 1
-    path: Assets/_Proyecto/Scenes/EscenaPlayer.unity
-    guid: cf3cee92b153aef409b9255ae25e84c0
   - enabled: 0
     path: Assets/EscenaPavel.unity
     guid: 14bfe91ba53c915448da4876b00aed67
+  - enabled: 1
+    path: Assets/_Proyecto/Scenes/EscenaPlayerOptimized.unity
+    guid: de10506423b8f7344a5b12cec4618fef
   - enabled: 1
     path: Assets/_Proyecto/Scenes/MainMenu.unity
     guid: 483bdad165c96754d83c960a9e053406
