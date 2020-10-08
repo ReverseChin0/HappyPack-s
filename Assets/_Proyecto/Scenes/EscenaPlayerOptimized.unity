@@ -71212,6 +71212,11 @@ PrefabInstance:
       propertyPath: puntosEntrega.Array.data[20]
       value: 
       objectReference: {fileID: 1268261617}
+    - target: {fileID: 720163212657507287, guid: f8c7bf9b3d664894a894a7da4fe23c44,
+        type: 3}
+      propertyPath: flechDir
+      value: 
+      objectReference: {fileID: 1762265729}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f8c7bf9b3d664894a894a7da4fe23c44, type: 3}
 --- !u!1001 &1113060062
@@ -108420,6 +108425,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2429933115718477728, guid: af1ef56fd5e82bd4aa7f43d8aaac20d9,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3094830459002813722, guid: af1ef56fd5e82bd4aa7f43d8aaac20d9,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 3223604171836570925, guid: af1ef56fd5e82bd4aa7f43d8aaac20d9,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -108550,6 +108565,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1762265725}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1762265729 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5182124880430909425, guid: af1ef56fd5e82bd4aa7f43d8aaac20d9,
+    type: 3}
+  m_PrefabInstance: {fileID: 1762265725}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47f04f3f579df8e45a688a30767ddc54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1763179379
 GameObject:
   m_ObjectHideFlags: 0

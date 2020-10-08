@@ -8,6 +8,7 @@ public class SCR_MissionManager : MonoBehaviour, INotificable
 {
     [SerializeField] Transform[] puntosInicio = default, puntosEntrega = default;
     [SerializeField] GameObject BeginPref = default, EndPref = default;
+    [SerializeField] SCR_FlechaDireccion flechDir = default;
     [SerializeField] GameObject MissionPopUp = default;
     [SerializeField] Image timeImage = default;
     SCR_MissionPointData[] missionPoints = default;
@@ -17,6 +18,7 @@ public class SCR_MissionManager : MonoBehaviour, INotificable
     SCR_ShaderColor finMision = default;
     TextMeshProUGUI tituloTMP = default, descripTMP = default;
     SCR_CarMovement player;
+    
     bool[] ocupados;
     bool enMision = false;
     float tiempoMision = 0, tiempoActual=0;
@@ -118,6 +120,8 @@ public class SCR_MissionManager : MonoBehaviour, INotificable
         }
         finMision.gameObject.SetActive(true);
         finMision.transform.position = puntosEntrega[Random.Range(0, puntosEntrega.Length)].position;
+        flechDir.gameObject.SetActive(true);
+        flechDir.iniciarFlecha(finMision.transform.position);
         finMision.Hide(false);
         tiempoActual = tiempoMision = currentMission.MaxDuration;
         player.paquetesaOcultar(currentMission.paqueteCount);
@@ -131,6 +135,7 @@ public class SCR_MissionManager : MonoBehaviour, INotificable
     public void FinMision() 
     {
         enMision = false;
+        flechDir.FinalizarFlecha();
         PlayerStats.AddMoney(currentMission.precioMision);
         PlayerStats.SaveStats();
         currentMission = null;

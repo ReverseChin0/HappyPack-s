@@ -58,6 +58,7 @@ MeshRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -82,6 +83,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!135 &7601377954266469675
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -110,7 +112,7 @@ MonoBehaviour:
   color: {r: 1.4980392, g: 1.2784314, b: 0, a: 0}
   colorString: _color
   floatOnTrigger: _alphaVal
-  desde: 1
+  desde: 0.6
   hasta: 0
   duracion: 1
 --- !u!114 &-1672510407801905752
