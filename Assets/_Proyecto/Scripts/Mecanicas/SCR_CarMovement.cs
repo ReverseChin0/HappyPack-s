@@ -3,15 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class SCR_CarMovement : MonoBehaviour
 {
     [SerializeField] float aceleracion = 1.0f, velocidadMax = 1.0f, fallTreshold = -20.0f;
     [SerializeField,Range(0.0f,1.0f)]float sensiGiro = 1.0f;
     [SerializeField] Transform _modelo = default, _spawnPoint = default;
-    [SerializeField] Image imgLife = default, imgGasoline = default;
     [SerializeField] SCR_PlayerProgress playStats = default;
     [SerializeField] GameObject[] packs = default;
+    [SerializeField] Image gslnImg = default, carHealthImg = default;
     Vector3 direccionfinal,rotacionEuler;
     Quaternion desiredRot;
     Transform _transform;
@@ -19,16 +20,12 @@ public class SCR_CarMovement : MonoBehaviour
     float velocidad = 0, velocidadActual = 0.0f, rotacion = 0.0f, tiltamount, gaspoints = 1.0f;
     int maxHp = 100, hp = 100;
     public bool isPhone = false, isStoped = false;
+    bool showGas = false, showHealth = false;
 
     private void Awake() {
         _rb = GetComponent<Rigidbody>();
         _transform = transform;
         if(playStats!=null) playStats = FindObjectOfType<SCR_PlayerProgress>();
-    }
-
-    private void Start() 
-    {
-        
     }
 
     private void Update() 
@@ -46,8 +43,8 @@ public class SCR_CarMovement : MonoBehaviour
         TiltCar();
 
         if (velocidad != 0) {
-            if(velocidad > 0)gaspoints -= 0.0001f;
-            imgGasoline.fillAmount = gaspoints; 
+            if(velocidad > 0)gaspoints -= 0.01f * Time.deltaTime;
+            gasUpdate();
             velocidadActual = velocidad / velocidadMax;
             float multiplicadorgiro = Remap(velocidadActual, 0, 1, 2, 1);
             
@@ -133,12 +130,13 @@ public class SCR_CarMovement : MonoBehaviour
     {
         if (hp > 0) {
             hp -= _dmg;
-            imgLife.fillAmount = hp * 0.01f;
             if (hp <= 0) {
                 //Morir
                 _transform.position = _spawnPoint.position;
                 hp = maxHp;
+                
             }
+            healthUpdate();
         }
     }
 
@@ -153,9 +151,45 @@ public class SCR_CarMovement : MonoBehaviour
         {
             return true; //regresa true si aun se le puede añadir mas
         }
-
     }
-
+    void gasUpdate()
+    {
+        if (gaspoints < 0.3f)
+        {
+            if (!showGas)
+            {
+                showGas = true;
+                gslnImg.DOFade(1, 1).SetEase(Ease.OutQuad);
+            }
+        }
+        else
+        {
+            if (showGas)
+            {
+                showGas = false;
+                gslnImg.DOFade(0, 1).SetEase(Ease.OutQuad);
+            }
+        }
+    }
+    void healthUpdate()
+    {
+        if (hp < 0.3f)
+        {
+            if (!showHealth)
+            {
+                showHealth = true;
+                carHealthImg.DOFade(1, 1).SetEase(Ease.OutQuad);
+            }
+        }
+        else
+        {
+            if (showHealth)
+            {
+                showHealth = false;
+                carHealthImg.DOFade(0, 1).SetEase(Ease.OutQuad);
+            }
+        }
+    }
     private void OnCollisionEnter(Collision collision) {
         if (collision.collider.CompareTag("Obstaculo")) {
             velocidad = Mathf.Min(velocidad, velocidadMax * 0.2f);
