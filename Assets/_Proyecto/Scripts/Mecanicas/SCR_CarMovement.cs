@@ -161,6 +161,13 @@ public class SCR_CarMovement : MonoBehaviour
                 showGas = true;
                 gslnImg.DOFade(1, 1).SetEase(Ease.OutQuad);
             }
+            else
+            {
+                if (gaspoints < 0.1f)
+                {
+                    gslnImg.color = new Color(0.9f, 0.3f, 0.4f,0.9f);
+                }
+            }
         }
         else
         {
@@ -168,6 +175,7 @@ public class SCR_CarMovement : MonoBehaviour
             {
                 showGas = false;
                 gslnImg.DOFade(0, 1).SetEase(Ease.OutQuad);
+                gslnImg.color = Color.white;
             }
         }
     }
